@@ -1,0 +1,16 @@
+[package]
+name = "Rust-Test-Task-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.7.7", features = ["multipart"] }
+tokio = { version = "1.0.2", features = ["full"] }
+askama_axum = "0.4.0"
+askama = { version = "0.12.1", features = ["with-axum"] }
+sqlx = { version = "0.8.2", features = ["runtime-tokio-native-tls", "sqlite", "time", "runtime-tokio-rustls"] }
+base64 = "0.20.0"
+reqwest = "0.12.8"
+
+
+

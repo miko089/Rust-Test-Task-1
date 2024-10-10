@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Posts</title>
+    <style>
+        .post-header {
+            display: flex;
+            align-items: center;
+        }
+        .avatar {
+            width: 50px; /* Adjust the size as needed */
+            height: 50px; /* Adjust the size as needed */
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+        async function submitForm(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText);
+                }
+
+                const result = await response.text();
+                alert('Post created successfully');
+                location.reload(); // Reload the page to show the new post
+            } catch (error) {
+                alert('There was a problem with your submission: ' + error.message);
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Create a New Blog Post</h1>
+<form action="/create_post" method="post" enctype="multipart/form-data" onsubmit="submitForm(event)">
+    <label for="username">User Name:</label>
+    <input type="text" id="username" name="username" required><br><br>
+
+    <label for="main_text">Blog Post Text:</label>
+    <textarea id="main_text" name="main_text" required></textarea><br><br>
+
+    <label for="image">Blog Post Image (.png):</label>
+    <input type="file" id="image" name="image" accept="image/png"><br><br>
+
+    <label for="avatar_url">User Avatar URL (.png):</label>
+    <input type="url" id="avatar_url" name="avatar_url"><br><br>
+
+    <button type="submit">Submit</button>
+</form>
+
+<h2>Blog Posts</h2>
+{% for post in posts %}
+<div class="post">
+    <div class="post-header">
+        {% if post.avatar.is_some() %}
+        <img src="data:image/png;base64,{{ post.avatar.as_ref().unwrap() }}" alt="User Avatar" class="avatar">
+        {% endif %}
+        <p><strong>{{ post.username }}</strong></p>
+    </div>
+    <p>{{ post.main_text }}</p>
+    <p><em>{{ post.date }}</em></p>
+    {% if post.image.is_some() %}
+    <img src="data:image/png;base64,{{ post.image.as_ref().unwrap() }}" alt="Blog Post Image">
+    {% endif %}
+</div>
+<hr>
+{% endfor %}
+</body>
+</html>
