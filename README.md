@@ -14,7 +14,7 @@ docker-compose up
 ```
 3. Open the browser and go to the following address
 ```bash
-http://localhost:3000/home
+http://localhost:3002/home
 ```
 
 ## What you can change
